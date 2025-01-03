@@ -1,0 +1,17 @@
+services:
+  forger:
+    build:
+      context: .
+    environment:
+      ACCOUNT_USERNAME: "${ACCOUNT_USERNAME}"
+      ACCOUNT_PASSWORD: "${ACCOUNT_PASSWORD}"
+      ACCOUNT_EMAIL: "${ACCOUNT_EMAIL}"
+    volumes:
+      - ~/.ssh:/home/${ACCOUNT_USERNAME}/.ssh:ro
+      - ~/.gitconfig:/home/${ACCOUNT_USERNAME}/.gitconfig:ro
+      - ~/.config/gh:/home/${ACCOUNT_USERNAME}/.config/gh:ro
+      - ~/.oh-my-zsh:/home/${ACCOUNT_USERNAME}/.oh-my-zsh:ro
+      - ~/.zshrc:/home/${ACCOUNT_USERNAME}/.zshrc:ro
+      - ~/Workspace:/workspace
+    ports:
+      - "2222:22"

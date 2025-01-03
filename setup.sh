@@ -1,5 +1,13 @@
-# Get sudo
-#sudo -v
+echo "Starting setup"
+
+# Load environment variables from .env file
+if [ -f .env ]; then
+  echo "Loading environment variables from .env"
+  export $(grep -v '^#' .env | xargs)
+else
+  echo "No .env file found, aborting"
+  exit 1
+fi
 
 # Install brew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -46,8 +54,8 @@ xcode-select --install
 # git config
 echo "Setting up git"
 
-git config --global user.name "Jonathan Irhodia"
-git config --global user.email "jonathanirhodia@gmail.com"
+git config --global user.name "$ACCOUNT_USERNAME"
+git config --global user.email "$ACCOUNT_EMAIL"
 git config --global core.editor "zed --wait"
 git config --global push.default upstream
 
@@ -55,8 +63,8 @@ git config --global push.default upstream
 echo "Logging into services"
 gh auth login
 
-echo "Logging into Bitwarden"
-bw login jonathanirhodia@gmail.com
+echo "Logging into Bitwarden for $ACCOUNT_EMAIL"
+bw login $ACCOUNT_EMAIL
 
 if [ $? -eq 0 ]; then
   echo "Successfully logged into Bitwarden"

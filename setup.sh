@@ -143,6 +143,10 @@ open "/Applications/Shottr.app"
 echo "Removing config programs"
 brew remove dockutil
 
+# Download scripts.sh using wget
+echo "Downloading scripts.sh"
+wget -O ~/.config/scripts.sh https://raw.githubusercontent.com/elcharitas/forger/main/scripts.sh
+
 # oh-my-zsh (must be last)
 sh -c "$(curl -# -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
@@ -157,6 +161,9 @@ sed -i -e 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlight
 
 # change preferred editor
 sed -i -e 's/# export EDITOR="nano"/export EDITOR="zed --wait"/' ~/.zshrc
+
+# Add scripts.sh to .zshrc
+echo "source ~/.config/scripts.sh" >> ~/.zshrc
 
 # finish
 source ~/.zshrc

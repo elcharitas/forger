@@ -2,10 +2,8 @@ services:
   forger:
     build:
       context: .
-    environment:
-      ACCOUNT_USERNAME: "${ACCOUNT_USERNAME}"
-      ACCOUNT_PASSWORD: "${ACCOUNT_PASSWORD}"
-      ACCOUNT_EMAIL: "${ACCOUNT_EMAIL}"
+    env_file:
+      - .env
     volumes:
       - ~/.ssh:/home/${ACCOUNT_USERNAME}/.ssh:ro
       - ~/.gitconfig:/home/${ACCOUNT_USERNAME}/.gitconfig:ro

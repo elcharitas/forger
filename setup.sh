@@ -66,6 +66,7 @@ gh auth login
 
 echo "Clone forger"
 gh repo clone elcharitas/forger ~/Workspace/forger
+gh repo clone elcharitas/forge-scripts ~/Workspace/scripts || echo "Failed to clone forge-scripts, continuing..."
 
 echo "Logging into Bitwarden for $ACCOUNT_EMAIL"
 bw login $ACCOUNT_EMAIL
@@ -176,7 +177,11 @@ sed -i -e 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlight
 sed -i -e 's/# export EDITOR="nano"/export EDITOR="zed --wait"/' ~/.zshrc
 
 # Add scripts.sh to .zshrc
-echo "source ~/Workspace/forger/scripts.sh" >> ~/.zshrc
+if [ -d ~/Workspace/scripts ]; then
+  echo "source ~/Workspace/scripts/scripts.sh" >> ~/.zshrc
+else
+  echo "Scripts directory does not exist, skipping addition to .zshrc"
+fi
 
 # finish
 source ~/.zshrc

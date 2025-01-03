@@ -30,6 +30,7 @@ brew install corepack dockutil fnm gh git iperf3
 
 # create LaunchAgents dir
 mkdir -p ~/Library/LaunchAgents
+mkdir -p ~/Workspace
 
 # enable automatic updates every 12 hours
 echo "Enabling autoupdate for homebrew packages..."
@@ -62,6 +63,9 @@ git config --global push.default upstream
 # login to services
 echo "Logging into services"
 gh auth login
+
+echo "Clone forger"
+gh repo clone elcharitas/forger ~/Workspace/forger
 
 echo "Logging into Bitwarden for $ACCOUNT_EMAIL"
 bw login $ACCOUNT_EMAIL
@@ -108,6 +112,11 @@ bw get notes "SSH Keys/Github SSH Key" > ~/.ssh/id_ed25519
 chmod 600 ~/.ssh/id_ed25519
 ssh-add ~/.ssh/id_ed25519
 
+# Build and start forger docker image with docker-compose
+echo "Building forger docker image"
+cd ~/Workspace/forger
+docker compose up -d --build
+
 # Set up dock hiding
 printf "\nsetting up dock hiding."
 defaults write com.apple.dock autohide -bool true
@@ -151,10 +160,6 @@ open "/Applications/Shottr.app"
 echo "Removing config programs"
 brew remove dockutil
 
-# Download scripts.sh using wget
-echo "Downloading scripts.sh"
-wget -O ~/.config/scripts.sh https://raw.githubusercontent.com/elcharitas/forger/main/scripts.sh
-
 # oh-my-zsh (must be last)
 sh -c "$(curl -# -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
@@ -171,7 +176,7 @@ sed -i -e 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlight
 sed -i -e 's/# export EDITOR="nano"/export EDITOR="zed --wait"/' ~/.zshrc
 
 # Add scripts.sh to .zshrc
-echo "source ~/.config/scripts.sh" >> ~/.zshrc
+echo "source ~/Workspace/forger/scripts.sh" >> ~/.zshrc
 
 # finish
 source ~/.zshrc

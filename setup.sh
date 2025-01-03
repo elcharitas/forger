@@ -1,5 +1,17 @@
 echo "Starting setup"
 
+# Check if we're on a Mac
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  read -p "Are you ready to configure your Mac with Forge? (y/n) " response
+  if [[ "$response" != "y" ]]; then
+    echo "Aborting setup."
+    exit 0
+  fi
+else
+  echo "This setup script is intended for macOS only."
+  exit 1
+fi
+
 # Load environment variables from .env file
 if [ -f .env ]; then
   echo "Loading environment variables from .env"
